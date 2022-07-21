@@ -38,7 +38,7 @@ double finaliza_tempo()
 
 int main(int argc, char const *argv[])
 {
-    int j, m, aux, numero_encontrado;
+    int j, m, numero_encontrado;
     const int N = 50000;
     unsigned encontrados = 0;
 
@@ -53,11 +53,9 @@ int main(int argc, char const *argv[])
             if (entradas[i] == entradas[j]) {
                 encontrados++;
                 numero_encontrado = entradas[i]; //Guarda o numero encontado na busca
-                for(m = i; m > 0; m--) { //Move todo vetor até aonde o número foi encontrado
-                    aux = entradas[m];
-                    entradas[m] = entradas[m-1];
-                }
-                entradas[0] = numero_encontrado;
+                for(m = i; m > 0; m--)
+                    entradas[m] = entradas[m-1]; //Move todo vetor para frente, do inicio ate o numero encontrado
+                entradas[0] = numero_encontrado;//O numero encontrado na busca ocupa Inicio do vetor
             }
         }
     }

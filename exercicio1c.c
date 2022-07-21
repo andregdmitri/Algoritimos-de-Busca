@@ -40,6 +40,7 @@ int main(int argc, char const *argv[])
 {
     const int N = 50000;
     unsigned encontrados = 0;
+    int aux;
 
     int* entradas = ler_inteiros("inteiros_entrada.txt", N);
     int* consultas = ler_inteiros("inteiros_busca.txt", N);
@@ -48,8 +49,16 @@ int main(int argc, char const *argv[])
     inicia_tempo();
     for (int i = 0; i < N; i++) {
         // buscar o elemento consultas[i] na entrada
-        if (TRUE)
-            encontrados++;
+        for (int j = 0; j < N; j++) {
+            if (entradas[i] == entradas[j]) {
+                encontrados++;
+                if (i > 0) {
+                    aux = entradas[i];
+                    entradas[i] = entradas[i-1];
+                    entradas[i-1] = aux;
+                }
+            }
+        }
     }
     double tempo_busca = finaliza_tempo();
 

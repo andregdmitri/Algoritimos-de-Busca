@@ -44,10 +44,12 @@ int main(int argc, char const *argv[])
     int* entradas = ler_inteiros("inteiros_entrada.txt", N);
     int* consultas = ler_inteiros("inteiros_busca.txt", N);
 
-    // realiza busca sequencia com realocação
+    // realiza busca sequencia com realocação por TRANSPOSICAO
     inicia_tempo();
     for (int i = 0; i < N; i++) {
         // buscar o elemento consultas[i] na entrada
+        if (TRUE)
+            encontrados++;
     }
     double tempo_busca = finaliza_tempo();
 

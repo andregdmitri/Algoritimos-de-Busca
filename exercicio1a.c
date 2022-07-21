@@ -48,6 +48,10 @@ int main(int argc, char const *argv[])
     inicia_tempo();
     for (int i = 0; i < N; i++) {
         // buscar o elemento consultas[i] na entrada
+        for (int j = 0; j < N; j++) {
+            if (entradas[i] == entradas[j]) {
+                encontrados++;
+        }
     }
     double tempo_busca = finaliza_tempo();
 

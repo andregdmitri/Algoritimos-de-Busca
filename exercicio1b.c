@@ -38,16 +38,28 @@ double finaliza_tempo()
 
 int main(int argc, char const *argv[])
 {
+    int j, m, aux, numero_encontrado;
     const int N = 50000;
     unsigned encontrados = 0;
 
     int* entradas = ler_inteiros("inteiros_entrada.txt", N);
     int* consultas = ler_inteiros("inteiros_busca.txt", N);
 
-    // realiza busca sequencia com realocação
+    // realiza busca sequencia com realocação usando o MOVE-FOWARD
     inicia_tempo();
     for (int i = 0; i < N; i++) {
         // buscar o elemento consultas[i] na entrada
+        for (int j = 0; j < N; j++) {
+            if (entradas[i] == entradas[j]) {
+                encontrados++;
+                numero_encontrado = entradas[i]; //Guarda o numero encontado na busca
+                for(m = i; m > 0; m--) { //Move todo vetor até aonde o número foi encontrado
+                    aux = entradas[m];
+                    entradas[m] = entradas[m-1];
+                }
+                entradas[0] = numero_encontrado;
+            }
+        }
     }
     double tempo_busca = finaliza_tempo();
 

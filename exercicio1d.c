@@ -36,17 +36,16 @@ double finaliza_tempo()
     return ((double) (_fim - _ini)) / CLOCKS_PER_SEC;
 }
 
-void merge_sort(int* entradas, int inicio, int fim) {
-    int i, j, k, meio = (ini+fim)/2;
-    int aux[ini+fim+1]
+void merge_sort_recursivo(int* entradas, int inicio, int fim, int *copia_entradas) {
+    int i, j, k, meio = (inicio+fim)/2;
 
     //Condicao de parada
     if (inicio = fim)
         return;
 
     //Divisao do vetor
-    merge_sort(entradas, ini, meio);
-    merge_sort(entradas, meio+1, fim);
+    merge_sort_recursivo(entradas, inicio, meio, copia_entradas);
+    merge_sort_recursivo(entradas, meio+1, fim, copia_entradas);
 
     //Ordenacao
     i = inicio;
@@ -54,29 +53,37 @@ void merge_sort(int* entradas, int inicio, int fim) {
     k = 0;
     while(i <= meio && j <= fim) {
         if (entradas[i] < entradas[j]) {
-            aux[k] = entradas[i];
+            copia_entradas[k] = entradas[i];
             i++;
         }
         else {
-            aux[k] = entradas[j];
+            copia_entradas[k] = entradas[j];
             j++;
         }
         k++;
     }
 
+    //Coloca dados faltantes
     while(i <= meio) {
-        aux[k] = entradas[i];
+        copia_entradas[k] = entradas[i];
         i++;
         k++;
     }
     while(j <= fim) {
-        aux[k] = entradas[j];
+        copia_entradas[k] = entradas[j];
         j++;
         k++;
     }
 
+    //Passa o vetor ordenado para entrada
     for (i = inicio; i <= fim; i++)
-        entradas[i] = aux[i];
+        entradas[i] = copia_entradas[i];
+}
+
+void merge_sort(int* entradas, int inicio, int tamanho) {
+    int *copia_entradas = (int *) malloc(tamanho*sizeof(int));
+    merge_sort_recursivo(entradas, 0, tamanho-1, copia_entradas);
+    free(copia_entradas);
 }
 
 int main(int argc, char const *argv[])
@@ -92,10 +99,10 @@ int main(int argc, char const *argv[])
     int* consultas = ler_inteiros("inteiros_busca.txt", N);
     
     // ordenar entrada
-    merge_sort(entradas, 0, N-1);
+    merge_sort(entradas, 0, N);
 
     // criar tabela de indice
-    int* tabela = malloc(T * sizeof(int*));
+    int* tabela = (int *) malloc(T * sizeof(int*));
     for (i = 0; i < T; i += 10000)
         tabela = &entradas[i];
 

@@ -53,7 +53,7 @@ int main(int argc, char const *argv[])
             if (entradas[i] == entradas[j]) {
                 encontrados++;
                 if (i > 0) {
-                    aux = entradas[i];
+                    aux = entradas[i];  
                     entradas[i] = entradas[i-1];
                     entradas[i-1] = aux;
                 }

@@ -40,16 +40,16 @@ int main(int argc, char const *argv[])
 {
     const int N = 50000;
     unsigned encontrados = 0;
-    int aux;
+    int i, j, aux;
 
     int* entradas = ler_inteiros("inteiros_entrada.txt", N);
     int* consultas = ler_inteiros("inteiros_busca.txt", N);
 
     // realiza busca sequencia com realocação por TRANSPOSICAO
     inicia_tempo();
-    for (int i = 0; i < N; i++) {
+    for (i = 0; i < N; i++) {
         // buscar o elemento consultas[i] na entrada
-        for (int j = 0; j < N; j++) {
+        for (j = 0; j < N; j++) {
             if (entradas[i] == consultas[j]) {
                 encontrados++;
                 if (i > 0) {

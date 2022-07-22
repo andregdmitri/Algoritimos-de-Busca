@@ -106,7 +106,7 @@ int main(int argc, char const *argv[])
     for (i = 10000; i <= T; i += 10000)
         tabela = &entradas[i];
         
-    // realizar consultas na tabela de indices 
+    // realizar consultas na tabela de indices
     inicia_tempo();
     for (i = 0; i < N; i++) {
         // buscar o elemento consultas[i] na entrada
@@ -119,7 +119,9 @@ int main(int argc, char const *argv[])
     }
     double tempo_busca = finaliza_tempo();
 
-    printf("Tempo de busca    :\t%fs\n", tempo_busca);
+    for (i = 0; i < N; i++)
+        printf("%d ", entradas[i]);
+    printf("\nTempo de busca    :\t%fs\n", tempo_busca);
     printf("Itens encontrados :\t%d\n", encontrados);
 
     return 0;

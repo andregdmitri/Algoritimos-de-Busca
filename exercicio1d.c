@@ -88,7 +88,7 @@ void merge_sort(int* entradas, int inicio, int tamanho) {
 
 int main(int argc, char const *argv[])
 {
-    int i;
+    int i, j, k;
     const int N = 50000;
     const int S = 10000;
     const int T = N/S;
@@ -103,13 +103,19 @@ int main(int argc, char const *argv[])
 
     // criar tabela de indice
     int* tabela = (int *) malloc(T * sizeof(int*));
-    for (i = 0; i < T; i += 10000)
+    for (i = 10000; i <= T; i += 10000)
         tabela = &entradas[i];
         
     // realizar consultas na tabela de indices 
     inicia_tempo();
     for (i = 0; i < N; i++) {
         // buscar o elemento consultas[i] na entrada
+        for(j = 10000; j <= T; i+=10000)
+            if(consultas[i] >= tabela[j])
+                break; //Percorre tabela de indices ate o indice certo
+        for (k = j - 10000; k < j; k++)//Busca sequencial no intervalo entre dois indices
+            if (entradas[k] == consultas[i])
+                encontrados++;
     }
     double tempo_busca = finaliza_tempo();
 

@@ -49,7 +49,7 @@ int main(int argc, char const *argv[])
     for (int i = 0; i < N; i++) {
         // buscar o elemento consultas[i] na entrada
         for (int j = 0; j < N; j++) {
-            if (entradas[i] == entradas[j])
+            if (entradas[i] == consultas[j])
                 encontrados++;
         }
     }

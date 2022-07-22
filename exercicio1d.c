@@ -105,7 +105,7 @@ int main(int argc, char const *argv[])
     int* tabela = (int *) malloc(T * sizeof(int*));
     for (i = 0; i < T; i += 10000)
         tabela = &entradas[i];
-
+        
     // realizar consultas na tabela de indices 
     inicia_tempo();
     for (i = 0; i < N; i++) {

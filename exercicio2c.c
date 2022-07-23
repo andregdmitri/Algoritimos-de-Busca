@@ -66,39 +66,38 @@ unsigned h_mul(unsigned x, unsigned B)
     return fmod(x * A, 1) * B;
 }
 
-bool inserir_div(int* tabela, unsigned elemento, unsigned B) {
+bool inserir_div(LISTA** tabela, unsigned elemento, unsigned B) {
     int i, posicao, elem;
     elem = converter(elemento);
     posicao = h_div(elem, B);
-    lista_inserir(tabela[posicao], elem);
+    returnlista_inserir(tabela[posicao], elem);
 }
 
-bool inserir_mul(int* tabela, unsigned elemento, unsigned B) {
+bool inserir_mul(LISTA** tabela, unsigned elemento, unsigned B) {
     int i, posicao, elem;
     elem = converter(elemento);
     posicao = h_mul(elem, B);
-    lista_inserir(tabela[posicao], elem);
+    return lista_inserir(tabela[posicao], elem);
 }
 
-bool busca_div (int* tabela, string elemento, unsigned B) {
+bool busca_div (LISTA** tabela, string elemento, unsigned B) {
     int i, posicao, elem;
     elem = converter(elemento);
     posicao = h_div(elem, B);
-    lista_buscar(tabela[posicao], elem);
+    return lista_buscar(tabela[posicao], elem);
 }
 
-bool busca_mul (int* tabela, string elemento, unsigned B) {
+bool busca_mul (LISTA** tabela, string elemento, unsigned B) {
     int i, posicao, elem;
     elem = converter(elemento);
     posicao = h_mul(elem, B);
-    bool a = lista_buscar(tabela[posicao], elem);
+    return lista_buscar(tabela[posicao], elem);
 }
 
-    void lista_apagar(LISTA **ptr);
-
-void destruir(int** tabela) {
+void destruir(LISTA*** tabela) {
     for(int i = 0; i < B; i++)
-        lista_apagar(&tabela);
+        lista_apagar(&(*tabela[i]));
+    free(tabela);
 }
 
 int main(int argc, char const *argv[])
@@ -119,14 +118,15 @@ int main(int argc, char const *argv[])
     
 
     // cria tabela hash com hash por divisão
-    int* tabela_div = (int*) malloc(B * sizeof(int));
+    LISTA** tabela_div = (LISTA**) malloc(B * sizeof(LISTA*));
     for (i = 0; i < B; i++)
-        tabela_div[i] = -1;
+        tabela_div[i] = lista_criar();
 
     // inserção dos dados na tabela hash com hash por divisão
     inicia_tempo();
     for (i = 0; i < N; i++) {
         // inserir insercoes[i] na tabela hash
+        inserir_div(tabela_div, insercoes[i], B);
     }
     double tempo_insercao_h_div = finaliza_tempo();
 
@@ -134,19 +134,25 @@ int main(int argc, char const *argv[])
     inicia_tempo();
     for (i = 0; i < M; i++) {
         // buscar consultas[i] na tabela hash
+        buscar_div(tabela_div, consultas[i], B);
+
     }
     double tempo_busca_h_div = finaliza_tempo();
 
     // destroi tabela hash com hash por divisão
-    destruir();
+    destruir(&tabela_div);
 
 
     // cria tabela hash com hash por multiplicação
+    LISTA** tabela_mul = (LISTA**) malloc(B * sizeof(LISTA*));
+    for (i = 0; i < B; i++)
+        tabela_mul[i] = lista_criar();
 
     // inserção dos dados na tabela hash com hash por multiplicação
     inicia_tempo();
     for (int i = 0; i < N; i++) {
         // inserir insercoes[i] na tabela hash
+        inserir_div(tabela_mul, insercoes[i], B);
     }
     double tempo_insercao_h_mul = finaliza_tempo();
 
@@ -154,11 +160,12 @@ int main(int argc, char const *argv[])
     inicia_tempo();
     for (int i = 0; i < M; i++) {
         // buscar consultas[i] na tabela hash
+         buscar_div(tabela_mul, consultas[i], B);
     }
     double tempo_busca_h_mul = finaliza_tempo();
 
     // destroi tabela hash com hash por multiplicação
-
+    destruir(&tabela_mul);
 
 
     printf("Hash por Divisão\n");

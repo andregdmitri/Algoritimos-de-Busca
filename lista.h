@@ -13,13 +13,11 @@
     #define FALSE 0
     typedef struct lista_ LISTA;
 
-    #include "item.h"
-
     LISTA *lista_criar(void);
-    boolean lista_inserir(LISTA *lista, unsigned elemento);
+    bool lista_inserir(LISTA *lista, unsigned elemento);
     void lista_destruir(LISTA **ptr);
-    boolean lista_busca(LISTA *lista, unsigned elemento);
-    boolean lista_vazia(LISTA *lista);
-    boolean lista_remover_item(LISTA *lista, unsigned elemento);
+    bool lista_busca(LISTA *lista, unsigned elemento);
+    bool lista_vazia(LISTA *lista);
+    bool lista_remover_item(LISTA *lista, unsigned elemento);
 
 #endif

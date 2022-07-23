@@ -1,6 +1,5 @@
-  #include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
-#include "item.h"
 #include "lista.h"
 
 typedef struct no_ NO;
@@ -57,7 +56,7 @@ void lista_esvazia(NO *ptr){
 	}
 }
 
-void lista_apagar(LISTA **ptr){
+void lista_destruir(LISTA **ptr){
 	if (*ptr == NULL)
 		return;
 	lista_esvazia((*ptr)->inicio);

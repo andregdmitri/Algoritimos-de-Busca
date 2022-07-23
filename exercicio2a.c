@@ -64,7 +64,7 @@ unsigned h_mul(unsigned x, unsigned i, unsigned B)
     return  ((int) ((fmod(x * A, 1) * B) + i)) % B;
 }
 
-bool inserir_div(int* tabela, unsigned elemento, unsigned B, unsigned colisoes_h_div) {
+bool inserir_div(int* tabela, string elemento, unsigned B, unsigned colisoes_h_div) {
     int i, posicao, elem;
     elem = converter(elemento);
     for (i = 0; i < B; i++) {
@@ -79,7 +79,7 @@ bool inserir_div(int* tabela, unsigned elemento, unsigned B, unsigned colisoes_h
     return FALSE;
 }
 
-bool inserir_mul(int* tabela, unsigned elemento, unsigned B, unsigned colisoes_h_mul) {
+bool inserir_mul(int* tabela, string elemento, unsigned B, unsigned colisoes_h_mul) {
     int i, posicao, elem;
     elem = converter(elemento);
     for (i = 0; i < B; i++) {

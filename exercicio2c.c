@@ -4,7 +4,6 @@
 #include <assert.h>
 #include <string.h>
 #include <math.h>
-#include "lista.h"
 
 // Definição das variaveis que controlam a medição de tempo
 clock_t _ini, _fim;
@@ -55,6 +54,88 @@ double finaliza_tempo()
     return ((double) (_fim - _ini)) / CLOCKS_PER_SEC;
 }
 
+typedef struct no_ NO;
+
+typedef struct no_{
+	int item;
+	NO *proximo;
+} NO; 
+
+typedef struct lista_{ 
+	NO *inicio;
+	NO *fim;
+	int tamanho;
+} LISTA;
+
+LISTA *lista_criar(void){ 
+	LISTA *lista = (LISTA*) malloc(sizeof(LISTA*));
+	if (lista !=NULL){ 
+		lista->inicio = NULL;
+		lista->fim = NULL;
+		lista->tamanho = 0;
+	}
+	return(lista);
+}
+
+bool lista_inserir(LISTA *lista, unsigned elemento){
+	if (lista != NULL) {
+		NO *pnovo = (NO *) malloc(sizeof (NO));
+		if (lista->inicio == NULL){
+			lista->inicio = pnovo;
+			pnovo->item = elemento;
+			pnovo->proximo = NULL;
+		}
+		else {
+			lista->fim->proximo = pnovo;
+			pnovo->item = elemento;
+			pnovo->proximo = NULL;
+		}
+		lista->fim = pnovo;
+		lista->tamanho++;
+		return (TRUE);
+	}
+	else 
+		return(FALSE);
+}
+
+void lista_esvazia(NO *ptr){ 
+	if (ptr != NULL){
+		if(ptr->proximo != NULL)
+			lista_esvazia(ptr->proximo);
+		free(ptr);
+		ptr = NULL;
+	}
+}
+
+void lista_destruir(LISTA **ptr){
+	if (*ptr == NULL)
+		return;
+	lista_esvazia((*ptr)->inicio);
+	free(*ptr);
+	*ptr = NULL;
+}
+
+bool lista_busca(LISTA *lista, unsigned elemento){ 
+	NO *p;
+	if (lista != NULL){
+		p = lista->inicio;
+		while (p != NULL) {
+			//Se dado encontrado retorna verdadeiro
+			if (p->item == elemento)
+				return TRUE; 
+			p = p->proximo;
+		}
+	}
+	//nao encontrado
+	return FALSE;
+}
+
+bool lista_vazia(LISTA *lista){
+	if((lista != NULL) && lista->inicio == NULL)
+		return (TRUE);
+	return (FALSE);
+}
+
 unsigned h_div(unsigned x, unsigned B)
 {
     return x % B;
@@ -66,14 +147,14 @@ unsigned h_mul(unsigned x, unsigned B)
     return fmod(x * A, 1) * B;
 }
 
-bool inserir_div(LISTA** tabela, unsigned elemento, unsigned B) {
+bool inserir_div(LISTA** tabela, string elemento, unsigned B) {
     int i, posicao, elem;
     elem = converter(elemento);
     posicao = h_div(elem, B);
-    returnlista_inserir(tabela[posicao], elem);
+    return lista_inserir(tabela[posicao], elem);
 }
 
-bool inserir_mul(LISTA** tabela, unsigned elemento, unsigned B) {
+bool inserir_mul(LISTA** tabela, string elemento, unsigned B) {
     int i, posicao, elem;
     elem = converter(elemento);
     posicao = h_mul(elem, B);
@@ -84,19 +165,19 @@ bool busca_div (LISTA** tabela, string elemento, unsigned B) {
     int i, posicao, elem;
     elem = converter(elemento);
     posicao = h_div(elem, B);
-    return lista_buscar(tabela[posicao], elem);
+    return lista_busca(tabela[posicao], elem);
 }
 
 bool busca_mul (LISTA** tabela, string elemento, unsigned B) {
     int i, posicao, elem;
     elem = converter(elemento);
     posicao = h_mul(elem, B);
-    return lista_buscar(tabela[posicao], elem);
+    return lista_busca(tabela[posicao], elem);
 }
 
-void destruir(LISTA*** tabela) {
+void destruir(LISTA*** tabela, int B) {
     for(int i = 0; i < B; i++)
-        lista_apagar(&(*tabela[i]));
+        lista_destruir(&(*tabela[i]));
     free(tabela);
 }
 
@@ -134,13 +215,13 @@ int main(int argc, char const *argv[])
     inicia_tempo();
     for (i = 0; i < M; i++) {
         // buscar consultas[i] na tabela hash
-        buscar_div(tabela_div, consultas[i], B);
+        busca_div(tabela_div, consultas[i], B);
 
     }
     double tempo_busca_h_div = finaliza_tempo();
 
     // destroi tabela hash com hash por divisão
-    destruir(&tabela_div);
+    destruir(&tabela_div, B);
 
 
     // cria tabela hash com hash por multiplicação
@@ -160,12 +241,12 @@ int main(int argc, char const *argv[])
     inicia_tempo();
     for (int i = 0; i < M; i++) {
         // buscar consultas[i] na tabela hash
-         buscar_div(tabela_mul, consultas[i], B);
+        busca_div(tabela_mul, consultas[i], B);
     }
     double tempo_busca_h_mul = finaliza_tempo();
 
     // destroi tabela hash com hash por multiplicação
-    destruir(&tabela_mul);
+    destruir(&tabela_mul, B);
 
 
     printf("Hash por Divisão\n");

@@ -36,6 +36,24 @@ double finaliza_tempo()
     return ((double) (_fim - _ini)) / CLOCKS_PER_SEC;
 }
 
+//Busca com MOVE FOWARD
+bool busca_move_foward(int consulta, int* entradas, int N) 
+{
+    int i, j, numero_encontrado;
+    for (i = 0; i < N; i++) 
+    {
+        if (consulta == entradas[i]) 
+        {
+            numero_encontrado = entradas[i]; //Guarda o numero encontado na busca
+            for(j = i; j > 0; j--)
+                entradas[j] = entradas[j-1]; //Move todo vetor para frente, do inicio ate o numero encontrado
+            entradas[0] = numero_encontrado;//O numero encontrado na busca ocupa Inicio do vetor
+            return TRUE;
+        }
+    }
+    return FALSE; //Consulta nao encontrada na Entrada
+}
+
 int main(int argc, char const *argv[])
 {
     int i, j, m, numero_encontrado;
@@ -47,17 +65,11 @@ int main(int argc, char const *argv[])
 
     // realiza busca sequencia com realocação usando o MOVE-FOWARD
     inicia_tempo();
-    for (i = 0; i < N; i++) {
+    for (i = 0; i < N; i++) 
+    {
         // buscar o elemento consultas[i] na entrada
-        for (j = 0; j < N; j++) {
-            if (entradas[i] == consultas[j]) {
-                encontrados++;
-                numero_encontrado = entradas[i]; //Guarda o numero encontado na busca
-                for(m = i; m > 0; m--)
-                    entradas[m] = entradas[m-1]; //Move todo vetor para frente, do inicio ate o numero encontrado
-                entradas[0] = numero_encontrado;//O numero encontrado na busca ocupa Inicio do vetor
-            }
-        }
+        if (busca_move_foward(consultas[i], entradas, N))
+            encontrados++;
     }
     double tempo_busca = finaliza_tempo();
 

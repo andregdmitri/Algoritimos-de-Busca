@@ -70,7 +70,7 @@ bool inserir (int* tabela, string elemento, unsigned B, unsigned colisoes) {
     int i, posicao, elem;
     elem = converter(elemento);
     for (i = 0; i < B; i++) {
-        HASH DUPLO;
+        //***************************HASH DUPLO;
         colisoes++;
     }
     // tabela cheia

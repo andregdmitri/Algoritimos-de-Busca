@@ -36,6 +36,17 @@ double finaliza_tempo()
     return ((double) (_fim - _ini)) / CLOCKS_PER_SEC;
 }
 
+//BUSCA SEQUENCIAL
+bool busca_sequencial(int consulta, int* entradas, int N) 
+{
+    for (int i = 0; i < N; i++) 
+    {
+        if (consulta == entradas[i])
+            return TRUE;
+    }
+    return FALSE;
+}
+
 int main(int argc, char const *argv[])
 {
     const int N = 50000;
@@ -47,12 +58,11 @@ int main(int argc, char const *argv[])
 
     // realiza busca sequencial
     inicia_tempo();
-    for (i = 0; i < N; i++) {
+    for (i = 0; i < N; i++) 
+    {
         // buscar o elemento consultas[i] na entrada
-        for (j = 0; j < N; j++) {
-            if (entradas[i] == consultas[j])
-                encontrados++;
-        }
+        if (busca_sequencial(consultas[i], entradas, N))
+            encontrados++;
     }
     double tempo_busca = finaliza_tempo();
 

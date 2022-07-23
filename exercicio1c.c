@@ -36,6 +36,25 @@ double finaliza_tempo()
     return ((double) (_fim - _ini)) / CLOCKS_PER_SEC;
 }
 
+//busca por TRANSPOSICAO
+bool busca_tranposicao (int consulta, int* entradas, int N) {
+    int i, aux;
+    for (i = 0; i < N; i++) 
+    {
+        if (consulta == entradas[i]) 
+        {
+            if (i > 0) 
+            { //Transpondo o elemento para tras
+                aux = entradas[i];  
+                entradas[i] = entradas[i-1];
+                entradas[i-1] = aux;
+            }
+            return TRUE;
+        }
+    }
+    return FALSE; //Consulta nao encontrada na Entrada
+}
+
 int main(int argc, char const *argv[])
 {
     const int N = 50000;
@@ -47,18 +66,11 @@ int main(int argc, char const *argv[])
 
     // realiza busca sequencia com realocação por TRANSPOSICAO
     inicia_tempo();
-    for (i = 0; i < N; i++) {
+    for (i = 0; i < N; i++)
+    {
         // buscar o elemento consultas[i] na entrada
-        for (j = 0; j < N; j++) {
-            if (entradas[i] == consultas[j]) {
-                encontrados++;
-                if (i > 0) {
-                    aux = entradas[i];  
-                    entradas[i] = entradas[i-1];
-                    entradas[i-1] = aux;
-                }
-            }
-        }
+        if (busca_tranposicao(consultas[i], entradas, N))
+            encontrados++;
     }
     double tempo_busca = finaliza_tempo();
 

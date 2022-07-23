@@ -93,6 +93,58 @@ bool busca_mul (int* tabela, string elemento, unsigned B) {
     lista_buscar(tabela[posicao], elem);
 }
 
+typedef struct {
+    int dado;
+    NO* prox;
+} NO;
+
+typedef struct {
+    int dado;
+    int tamanho;
+    NO* inicio;
+    NO* fim;
+} lista;
+
+lista *lista_criar(void){ 
+	lista *l = (lista*) malloc(sizeof(lista*));
+	if (l !=NULL){ 
+		l->inicio = NULL;
+		l->tamanho = 0;
+        l->dado = -1; //Dado valido para ser substituido
+	}
+	return(l);
+}
+
+void lista_inserir(lista *l, int dado){
+    NO *pnovo = (NO *) malloc(sizeof (NO));
+    if (l->inicio == NULL)
+        l->inicio = pnovo; //Caso seja inicio da lista
+    else
+        pnovo->prox = NULL; //Caso nao seja inicio da lista
+    pnovo->dado = dado;
+    pnovo->prox = NULL;
+    l->fim = pnovo;
+    l->tamanho++;
+}
+
+void lista_esvazia(NO *ptr){ 
+	if (ptr != NULL){
+		if(ptr->prox != NULL)
+			lista_esvazia(ptr->prox);
+		item_apagar(&ptr->dado);
+		free(ptr);
+		ptr = NULL;
+	}
+}
+
+void lista_apagar(lista **ptr){
+	if (*ptr == NULL)
+		return;
+	lista_esvazia((*ptr)->inicio);
+	free(*ptr);
+	*ptr = NULL;
+}
+
 int main(int argc, char const *argv[])
 {
     int i;

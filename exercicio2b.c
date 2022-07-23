@@ -66,10 +66,12 @@ unsigned h_mul(unsigned x, unsigned i, unsigned B)
     return  ((int) ((fmod(x * A, 1) * B) + i)) % B;
 }
 
-bool inserir (int* tabela, string elemento, unsigned B) {
+bool inserir (int* tabela, string elemento, unsigned B, unsigned colisoes) {
     int i, posicao, elem;
     elem = converter(elemento);
     for (i = 0; i < B; i++) {
+        HASH DUPLO;
+        colisoes++;
     }
     // tabela cheia
     return FALSE;
@@ -107,6 +109,7 @@ int main(int argc, char const *argv[])
     inicia_tempo();
     for (i = 0; i < N; i++) {
         // inserir insercoes[i] na tabela hash
+        inserir (tabela, insercoes[i], B, colisoes);
     }
     double tempo_insercao = finaliza_tempo();
 

@@ -64,7 +64,7 @@ unsigned h_mul(unsigned x, unsigned i, unsigned B)
     return  ((int) ((fmod(x * A, 1) * B) + i)) % B;
 }
 
-bool inserir_div(int* tabela, unsigned elemento, unsigned B) {
+bool inserir_div(int* tabela, unsigned elemento, unsigned B, unsigned colisoes_h_div) {
     int i, posicao, elem;
     elem = converter(elemento);
     for (i = 0; i < B; i++) {
@@ -73,12 +73,13 @@ bool inserir_div(int* tabela, unsigned elemento, unsigned B) {
             tabela[posicao] = elem;
             return TRUE;
         }
+        colisoes_h_div++;
     }
     // tabela cheia
     return FALSE;
 }
 
-bool inserir_mul(int* tabela, unsigned elemento, unsigned B) {
+bool inserir_mul(int* tabela, unsigned elemento, unsigned B, unsigned colisoes_h_mul) {
     int i, posicao, elem;
     elem = converter(elemento);
     for (i = 0; i < B; i++) {
@@ -87,6 +88,7 @@ bool inserir_mul(int* tabela, unsigned elemento, unsigned B) {
             tabela[posicao] = elem;
             return TRUE;
         }
+        colisoes_h_mul++;
     }
     // tabela cheia
     return FALSE;
@@ -144,7 +146,7 @@ int main(int argc, char const *argv[])
     inicia_tempo();
     for (i = 0; i < N; i++) {
         // inserir insercoes[i] na tabela hash
-        inserir_div(tabela_div, insercoes[i], B);
+        inserir_div(tabela_div, insercoes[i], B, colisoes_h_div);
     }
     double tempo_insercao_h_div = finaliza_tempo();
 
@@ -172,7 +174,7 @@ int main(int argc, char const *argv[])
     inicia_tempo();
     for (i = 0; i < N; i++) {
         // inserir insercoes[i] na tabela hash
-        inserir_mul(tabela_mul, insercoes[i], B);
+        inserir_mul(tabela_mul, insercoes[i], B, colisoes_h_mul);
     }
     double tempo_insercao_h_mul = finaliza_tempo();
 

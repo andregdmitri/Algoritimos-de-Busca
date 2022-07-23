@@ -72,24 +72,33 @@ unsigned hash_duplo(unsigned x, unsigned i, unsigned B)
     return  hx;
 }
 
-bool inserir (int* tabela, string elemento, unsigned B, unsigned colisoes) {
-    unsigned i, posicao, elem;
-    elem = converter(elemento);
+bool inserir(string* tabela, string elemento, unsigned B, unsigned *colisoes) {
+    int i, posicao, conversao;
+    conversao = converter(elemento);
     for (i = 0; i < B; i++) {
-        posicao = hash_duplo(elem, i, B);
-        if (tabela[posicao] == -1) {
+        posicao = hash_duplo(conversao, i, B);
+        if (tabela[posicao] == NULL) { //Insere se a posicao estiver disponivel
+            tabela[posicao] = malloc(sizeof(char) * MAX_STRING_LEN);
+            strcpy(tabela[posicao], elemento);
             return TRUE;
         }
-        colisoes++;
+        *colisoes++; //Cada vez que nao der para inserir eh uma colisao
     }
     // tabela cheia
     return FALSE;
 }
 
-bool buscar (int* tabela, string elemento, unsigned B) {
-    int i, posicao, elem;
-    elem = converter(elemento);
+bool buscar (string* tabela, string elemento, unsigned B) {
+    int i, posicao, conversao;
+    conversao = converter(elemento);
     for (i = 0; i < B; i++) {
+        posicao = hash_duplo(conversao, i, B);
+        //Se nulo, o elemento nao foi armazenado
+        if(tabela[posicao] == NULL)
+            return FALSE;
+        // Se o elemento estiver na posicao fornecida ou nas proximas, sucesso
+        if (strcmp(tabela[posicao], elemento) == 0)
+            return TRUE;
     }
     // Elemento nao encontrado na tabela
     return FALSE;
@@ -109,15 +118,13 @@ int main(int argc, char const *argv[])
     string* consultas = ler_strings("strings_busca.txt", M);
 
     // cria tabela hash com hash por hash duplo
-    unsigned* tabela = (unsigned*) malloc(B * sizeof(int));
-    for (i = 0; i < B; i++)
-        tabela[i] = -1;
+    string* tabela = (string*) calloc(sizeof(string), B);
 
     // inserção dos dados na tabela hash
     inicia_tempo();
     for (i = 0; i < N; i++) {
         // inserir insercoes[i] na tabela hash
-        inserir (tabela, insercoes[i], B, colisoes);
+        inserir (tabela, insercoes[i], B, &colisoes);
     }
     double tempo_insercao = finaliza_tempo();
 
@@ -125,7 +132,8 @@ int main(int argc, char const *argv[])
     inicia_tempo();
     for (i = 0; i < M; i++) {
         // buscar consultas[i] na tabela hash
-        buscar(tabela, consultas[i], B);
+        if (buscar(tabela, consultas[i], B))
+            encontrados++;
     }
     double tempo_busca = finaliza_tempo();
 

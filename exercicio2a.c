@@ -102,9 +102,10 @@ bool busca_div (string* tabela, string elemento, unsigned B) {
     for (i = 0; i < B; i++) {
         posicao = h_div(conversao, i, B);
         //Se nulo, o elemento nao foi armazenado
-        if(tabela[posicao] == NULL) 
+        if(tabela[posicao] == NULL)
+            return FALSE;
         // Se o elemento estiver na posicao fornecida ou nas proximas, sucesso
-        if (strcmp(tabela[posicao], elemento))
+        if (strcmp(tabela[posicao], elemento) == 0)
             return TRUE;
     }
     // Elemento nao encontrado na tabela
@@ -117,9 +118,10 @@ bool busca_mul (string* tabela, string elemento, unsigned B) {
     for (i = 0; i < B; i++) {
         posicao = h_mul(conversao, i, B);
         //Se nulo, o elemento nao foi armazenado
-        if(tabela[posicao] == NULL) 
+        if(tabela[posicao] == NULL)
+            return FALSE;
         // Se o elemento estiver na posicao fornecida ou nas proximas, sucesso
-        if (strcmp(tabela[posicao], elemento))
+        if (strcmp(tabela[posicao], elemento) == 0)
             return TRUE;
     }
     // Elemento nao encontrado na tabela
@@ -141,7 +143,6 @@ int main(int argc, char const *argv[])
 
     string* insercoes = ler_strings("strings_entrada.txt", N);
     string* consultas = ler_strings("strings_busca.txt", M);
-
 
     // cria tabela hash com hash por divisão
     string* tabela_div = (string*) calloc(sizeof(string), B);
@@ -166,6 +167,7 @@ int main(int argc, char const *argv[])
     // limpa a tabela hash com hash por divisão
     for (i = 0; i < B; i++)
         free(tabela_div[i]);
+    free(tabela_div[i]);
 
 
 //******************************* Hash por MULTIPLICACAO *******************************
@@ -192,6 +194,7 @@ int main(int argc, char const *argv[])
     // limpa a tabela hash com hash por multiplicação
     for (i = 0; i < B; i++)
         free(tabela_mul[i]);
+    free(tabela_mul[i]);
 
     printf("Hash por Divisão\n");
     printf("Colisões na inserção: %d\n", colisoes_h_div);

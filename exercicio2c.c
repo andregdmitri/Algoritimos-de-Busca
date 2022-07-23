@@ -178,7 +178,6 @@ bool busca_mul (LISTA** tabela, string elemento, unsigned B) {
 void destruir(LISTA*** tabela, int B) {
     for(int i = 0; i < B; i++)
         lista_destruir(&(*tabela[i]));
-    free(tabela);
 }
 
 int main(int argc, char const *argv[])
@@ -199,7 +198,7 @@ int main(int argc, char const *argv[])
     
 
     // cria tabela hash com hash por divisão
-    LISTA** tabela_div = (LISTA**) malloc(B * sizeof(LISTA*));
+    LISTA** tabela_div = (LISTA**) malloc(B * sizeof(LISTA));
     for (i = 0; i < B; i++)
         tabela_div[i] = lista_criar();
 
@@ -215,17 +214,18 @@ int main(int argc, char const *argv[])
     inicia_tempo();
     for (i = 0; i < M; i++) {
         // buscar consultas[i] na tabela hash
-        busca_div(tabela_div, consultas[i], B);
+        if(busca_div(tabela_div, consultas[i], B))
+            encontrados_h_div++;
 
     }
     double tempo_busca_h_div = finaliza_tempo();
 
     // destroi tabela hash com hash por divisão
     destruir(&tabela_div, B);
-
+    free(tabela_div);
 
     // cria tabela hash com hash por multiplicação
-    LISTA** tabela_mul = (LISTA**) malloc(B * sizeof(LISTA*));
+    LISTA** tabela_mul = (LISTA**) malloc(B * sizeof(LISTA));
     for (i = 0; i < B; i++)
         tabela_mul[i] = lista_criar();
 
@@ -247,7 +247,7 @@ int main(int argc, char const *argv[])
 
     // destroi tabela hash com hash por multiplicação
     destruir(&tabela_mul, B);
-
+    free(tabela_mul);
 
     printf("Hash por Divisão\n");
     printf("Colisões na inserção: %d\n", colisoes_h_div);

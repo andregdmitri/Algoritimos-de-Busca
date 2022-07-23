@@ -68,6 +68,7 @@ unsigned h_mul(unsigned x, unsigned i, unsigned B)
 
 int main(int argc, char const *argv[])
 {
+    int i;
     const int N = 50000;
     const int M = 70000;
     const int B = 150001;
@@ -80,17 +81,20 @@ int main(int argc, char const *argv[])
 
 
     // cria tabela hash com hash por hash duplo
+    string* tabela = (string*) malloc(B * sizeof(int));
+    for (i = 0; i < B; i++)
+        tabela[i] = "!";
 
     // inserção dos dados na tabela hash
     inicia_tempo();
-    for (int i = 0; i < N; i++) {
+    for (i = 0; i < N; i++) {
         // inserir insercoes[i] na tabela hash
     }
     double tempo_insercao = finaliza_tempo();
 
     // busca dos dados na tabela hash
     inicia_tempo();
-    for (int i = 0; i < M; i++) {
+    for (i = 0; i < M; i++) {
         // buscar consultas[i] na tabela hash
     }
     double tempo_busca = finaliza_tempo();

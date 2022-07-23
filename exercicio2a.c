@@ -64,56 +64,62 @@ unsigned h_mul(unsigned x, unsigned i, unsigned B)
     return  ((int) ((fmod(x * A, 1) * B) + i)) % B;
 }
 
-bool inserir_div(int* tabela, string elemento, unsigned B, unsigned colisoes_h_div) {
-    int i, posicao, elem;
-    elem = converter(elemento);
+bool inserir_div(string* tabela, string elemento, unsigned B, unsigned *coloises_h_div) {
+    int i, posicao, conversao;
+    conversao = converter(elemento);
     for (i = 0; i < B; i++) {
-        posicao = h_div(elem, i, B);
-        if (tabela[posicao] == -1) { //Insere se a posicao estiver disponivel
-            tabela[posicao] = elem;
+        posicao = h_div(conversao, i, B);
+        if (tabela[posicao] == NULL) { //Insere se a posicao estiver disponivel
+            tabela[posicao] = malloc(sizeof(char) * MAX_STRING_LEN);
+            strcpy(tabela[posicao], elemento);
             return TRUE;
         }
-        colisoes_h_div++;
+        *coloises_h_div++; //Cada vez que nao der para inserir eh uma colisao
     }
     // tabela cheia
     return FALSE;
 }
 
-bool inserir_mul(int* tabela, string elemento, unsigned B, unsigned colisoes_h_mul) {
-    int i, posicao, elem;
-    elem = converter(elemento);
+bool inserir_mul(string* tabela, string elemento, unsigned B, unsigned *colisoes_h_mul) {
+    int i, posicao, conversao;
+    conversao = converter(elemento);
     for (i = 0; i < B; i++) {
-        posicao = h_mul(elem, i, B);
-        if (tabela[posicao] == -1) { //Insere se a posicao estiver disponivel
-            tabela[posicao] = elem;
+        posicao = h_mul(conversao, i, B);
+        if (tabela[posicao] == NULL) { //Insere se a posicao estiver disponivel
+            tabela[posicao] = malloc(sizeof(char) * MAX_STRING_LEN);
+            strcpy(tabela[posicao], elemento);
             return TRUE;
         }
-        colisoes_h_mul++;
+        *colisoes_h_mul++; //Cada vez que nao der para inserir eh uma colisao
     }
     // tabela cheia
     return FALSE;
 }
 
-bool busca_div (int* tabela, string elemento, unsigned B) {
-    int i, posicao, elem;
-    elem = converter(elemento);
+bool busca_div (string* tabela, string elemento, unsigned B) {
+    int i, posicao, conversao;
+    conversao = converter(elemento);
     for (i = 0; i < B; i++) {
-        posicao = h_div(elem, i, B);
+        posicao = h_div(conversao, i, B);
+        //Se nulo, o elemento nao foi armazenado
+        if(tabela[posicao] == NULL) 
         // Se o elemento estiver na posicao fornecida ou nas proximas, sucesso
-        if (tabela[posicao] == elem)
+        if (strcmp(tabela[posicao], elemento))
             return TRUE;
     }
     // Elemento nao encontrado na tabela
     return FALSE;
 }
 
-bool busca_mul (int* tabela, string elemento, unsigned B) {
-    int i, posicao, elem;
-    elem = converter(elemento);
+bool busca_mul (string* tabela, string elemento, unsigned B) {
+    int i, posicao, conversao;
+    conversao = converter(elemento);
     for (i = 0; i < B; i++) {
-        posicao = h_mul(elem, i, B);
+        posicao = h_mul(conversao, i, B);
+        //Se nulo, o elemento nao foi armazenado
+        if(tabela[posicao] == NULL) 
         // Se o elemento estiver na posicao fornecida ou nas proximas, sucesso
-        if (tabela[posicao] == elem)
+        if (strcmp(tabela[posicao], elemento))
             return TRUE;
     }
     // Elemento nao encontrado na tabela
@@ -138,15 +144,13 @@ int main(int argc, char const *argv[])
 
 
     // cria tabela hash com hash por divisão
-    int* tabela_div = (int*) malloc(sizeof(int) * B);
-    for (i = 0; i < B; i++)
-        tabela_div[i] = -1;
+    string* tabela_div = (string*) calloc(sizeof(string), B);
     
     // inserção dos dados na tabela hash usando hash por divisão
     inicia_tempo();
     for (i = 0; i < N; i++) {
         // inserir insercoes[i] na tabela hash
-        inserir_div(tabela_div, insercoes[i], B, colisoes_h_div);
+        inserir_div(tabela_div, insercoes[i], B, &colisoes_h_div);
     }
     double tempo_insercao_h_div = finaliza_tempo();
 
@@ -161,20 +165,18 @@ int main(int argc, char const *argv[])
 
     // limpa a tabela hash com hash por divisão
     for (i = 0; i < B; i++)
-        tabela_div[i] = -1;
+        free(tabela_div[i]);
 
 
 //******************************* Hash por MULTIPLICACAO *******************************
     // cria tabela hash com hash por multiplicação
-    int* tabela_mul = (int*) malloc(B * sizeof(int));
-    for (i = 0; i < B; i++)
-        tabela_mul[i] = -1;
+    string* tabela_mul = (string*) calloc(sizeof(string), B);
 
     // inserção dos dados na tabela hash usando hash por multiplicação
     inicia_tempo();
     for (i = 0; i < N; i++) {
         // inserir insercoes[i] na tabela hash
-        inserir_mul(tabela_mul, insercoes[i], B, colisoes_h_mul);
+        inserir_mul(tabela_mul, insercoes[i], B, &colisoes_h_mul);
     }
     double tempo_insercao_h_mul = finaliza_tempo();
 
@@ -189,7 +191,7 @@ int main(int argc, char const *argv[])
 
     // limpa a tabela hash com hash por multiplicação
     for (i = 0; i < B; i++)
-        tabela_mul[i] = -1;
+        free(tabela_mul[i]);
 
     printf("Hash por Divisão\n");
     printf("Colisões na inserção: %d\n", colisoes_h_div);

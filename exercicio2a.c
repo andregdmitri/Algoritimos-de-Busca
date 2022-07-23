@@ -138,7 +138,7 @@ int main(int argc, char const *argv[])
 
 
     // cria tabela hash com hash por divisão
-    int* tabela_div = (int*) malloc(B * sizeof(int));
+    int* tabela_div = (int*) malloc(sizeof(int) * B);
     for (i = 0; i < B; i++)
         tabela_div[i] = -1;
     
@@ -154,7 +154,7 @@ int main(int argc, char const *argv[])
     inicia_tempo();
     for (i = 0; i < M; i++) {
         // buscar consultas[i] na tabela hash
-        if (busca_div(tabela_div, consultas[i], B) == TRUE)
+        if (busca_div(tabela_div, consultas[i], B))
             encontrados_h_div++;
     }
     double tempo_busca_h_div = finaliza_tempo();
@@ -182,7 +182,7 @@ int main(int argc, char const *argv[])
     inicia_tempo();
     for (i = 0; i < M; i++) {
         // buscar consultas[i] na tabela hash
-         if (busca_mul(tabela_mul, consultas[i], B) == TRUE)
+         if (busca_mul(tabela_mul, consultas[i], B))
             encontrados_h_mul++;
     }
     double tempo_busca_h_mul = finaliza_tempo();

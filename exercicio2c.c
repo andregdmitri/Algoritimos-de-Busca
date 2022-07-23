@@ -102,6 +102,7 @@ void lista_esvazia(NO *ptr){
 	if (ptr != NULL){
 		if(ptr->proximo != NULL)
 			lista_esvazia(ptr->proximo);
+		item_apagar(&ptr->item);
 		free(ptr);
 		ptr = NULL;
 	}
@@ -128,12 +129,6 @@ bool lista_busca(LISTA *lista, unsigned elemento){
 	}
 	//nao encontrado
 	return FALSE;
-}
-
-bool lista_vazia(LISTA *lista){
-	if((lista != NULL) && lista->inicio == NULL)
-		return (TRUE);
-	return (FALSE);
 }
 
 unsigned h_div(unsigned x, unsigned B)

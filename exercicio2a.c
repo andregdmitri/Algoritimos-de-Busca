@@ -65,11 +65,12 @@ unsigned h_mul(unsigned x, unsigned i, unsigned B)
 }
 
 bool inserir_div(int* tabela, unsigned elemento, unsigned B) {
-    int i, posicao;
+    int i, posicao, elem;
+    elem = converter(elemento);
     for (i = 0; i < B; i++) {
-        posicao = h_div(elemento, i, B);
+        posicao = h_div(elem, i, B);
         if (tabela[posicao] == -1) { //Insere se a posicao estiver disponivel
-            tabela[posicao] = elemento;
+            tabela[posicao] = elem;
             return TRUE;
         }
     }
@@ -78,11 +79,12 @@ bool inserir_div(int* tabela, unsigned elemento, unsigned B) {
 }
 
 bool inserir_mul(int* tabela, unsigned elemento, unsigned B) {
-    int i, posicao;
+    int i, posicao, elem;
+    elem = converter(elemento);
     for (i = 0; i < B; i++) {
-        posicao = h_mul(elemento, i, B);
+        posicao = h_mul(elem, i, B);
         if (tabela[posicao] == -1) { //Insere se a posicao estiver disponivel
-            tabela[posicao] = elemento;
+            tabela[posicao] = elem;
             return TRUE;
         }
     }
@@ -90,24 +92,26 @@ bool inserir_mul(int* tabela, unsigned elemento, unsigned B) {
     return FALSE;
 }
 
-bool busca_div (int* tabela, unsigned elemento, unsigned B) {
-    int i, posicao;
+bool busca_div (int* tabela, string elemento, unsigned B) {
+    int i, posicao, elem;
+    elem = converter(elemento);
     for (i = 0; i < B; i++) {
-        posicao = h_div(elemento, i, B);
+        posicao = h_div(elem, i, B);
         // Se o elemento estiver na posicao fornecida ou nas proximas, sucesso
-        if (tabela[posicao] == elemento)
+        if (tabela[posicao] == elem)
             return TRUE;
     }
     // Elemento nao encontrado na tabela
     return FALSE;
 }
 
-bool busca_mul (int* tabela, unsigned elemento, unsigned B) {
-    int i, posicao;
+bool busca_mul (int* tabela, string elemento, unsigned B) {
+    int i, posicao, elem;
+    elem = converter(elemento);
     for (i = 0; i < B; i++) {
-        posicao = h_mul(elemento, i, B);
+        posicao = h_mul(elem, i, B);
         // Se o elemento estiver na posicao fornecida ou nas proximas, sucesso
-        if (tabela[posicao] == elemento)
+        if (tabela[posicao] == elem)
             return TRUE;
     }
     // Elemento nao encontrado na tabela
@@ -140,7 +144,7 @@ int main(int argc, char const *argv[])
     inicia_tempo();
     for (i = 0; i < N; i++) {
         // inserir insercoes[i] na tabela hash
-        inserir_div(tabela_div, converter(insercoes[i]), B);
+        inserir_div(tabela_div, insercoes[i], B);
     }
     double tempo_insercao_h_div = finaliza_tempo();
 
@@ -148,7 +152,7 @@ int main(int argc, char const *argv[])
     inicia_tempo();
     for (i = 0; i < M; i++) {
         // buscar consultas[i] na tabela hash
-        if (busca_div(tabela_div, converter(consultas[i]), B) == TRUE)
+        if (busca_div(tabela_div, consultas[i], B) == TRUE)
             encontrados_h_div++;
     }
     double tempo_busca_h_div = finaliza_tempo();
@@ -168,7 +172,7 @@ int main(int argc, char const *argv[])
     inicia_tempo();
     for (i = 0; i < N; i++) {
         // inserir insercoes[i] na tabela hash
-        inserir_mul(tabela_mul, converter(insercoes[i]), B);
+        inserir_mul(tabela_mul, insercoes[i], B);
     }
     double tempo_insercao_h_mul = finaliza_tempo();
 
@@ -176,7 +180,7 @@ int main(int argc, char const *argv[])
     inicia_tempo();
     for (i = 0; i < M; i++) {
         // buscar consultas[i] na tabela hash
-         if (busca_mul(tabela_mul, converter(consultas[i]), B) == TRUE)
+         if (busca_mul(tabela_mul, consultas[i], B) == TRUE)
             encontrados_h_mul++;
     }
     double tempo_busca_h_mul = finaliza_tempo();

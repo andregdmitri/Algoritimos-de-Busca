@@ -66,6 +66,24 @@ unsigned h_mul(unsigned x, unsigned i, unsigned B)
     return  ((int) ((fmod(x * A, 1) * B) + i)) % B;
 }
 
+bool inserir (int* tabela, string elemento, unsigned B) {
+    int i, posicao, elem;
+    elem = converter(elemento);
+    for (i = 0; i < B; i++) {
+    }
+    // tabela cheia
+    return FALSE;
+}
+
+bool buscar (int* tabela, string elemento, unsigned B) {
+    int i, posicao, elem;
+    elem = converter(elemento);
+    for (i = 0; i < B; i++) {
+    }
+    // Elemento nao encontrado na tabela
+    return FALSE;
+}
+
 int main(int argc, char const *argv[])
 {
     int i;
@@ -96,6 +114,7 @@ int main(int argc, char const *argv[])
     inicia_tempo();
     for (i = 0; i < M; i++) {
         // buscar consultas[i] na tabela hash
+        buscar(tabela, consultas[i], B);
     }
     double tempo_busca = finaliza_tempo();
 

@@ -66,11 +66,20 @@ unsigned h_mul(unsigned x, unsigned i, unsigned B)
     return  ((int) ((fmod(x * A, 1) * B) + i)) % B;
 }
 
+unsigned hash_duplo(unsigned x, unsigned i, unsigned B)
+{
+    unsigned hx = (h_mul(x, i, B) + (i * h_div(x, i, B)))%B;
+    return  hx;
+}
+
 bool inserir (int* tabela, string elemento, unsigned B, unsigned colisoes) {
-    int i, posicao, elem;
+    unsigned i, posicao, elem;
     elem = converter(elemento);
     for (i = 0; i < B; i++) {
-        //***************************HASH DUPLO;
+        posicao = hash_duplo(elem, i, B);
+        if (tabela[posicao] == -1) {
+            return TRUE;
+        }
         colisoes++;
     }
     // tabela cheia
@@ -99,11 +108,10 @@ int main(int argc, char const *argv[])
     string* insercoes = ler_strings("strings_entrada.txt", N);
     string* consultas = ler_strings("strings_busca.txt", M);
 
-
     // cria tabela hash com hash por hash duplo
-    string* tabela = (string*) malloc(B * sizeof(int));
+    unsigned* tabela = (unsigned*) malloc(B * sizeof(int));
     for (i = 0; i < B; i++)
-        tabela[i] = "!";
+        tabela[i] = -1;
 
     // inserção dos dados na tabela hash
     inicia_tempo();

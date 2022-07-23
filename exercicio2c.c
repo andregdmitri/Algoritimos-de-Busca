@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <string.h>
 #include <math.h>
+#include "lista.h"
 
 // Definição das variaveis que controlam a medição de tempo
 clock_t _ini, _fim;
@@ -90,59 +91,14 @@ bool busca_mul (int* tabela, string elemento, unsigned B) {
     int i, posicao, elem;
     elem = converter(elemento);
     posicao = h_mul(elem, B);
-    lista_buscar(tabela[posicao], elem);
+    bool a = lista_buscar(tabela[posicao], elem);
 }
 
-typedef struct {
-    int dado;
-    NO* prox;
-} NO;
+    void lista_apagar(LISTA **ptr);
 
-typedef struct {
-    int dado;
-    int tamanho;
-    NO* inicio;
-    NO* fim;
-} lista;
-
-lista *lista_criar(void){ 
-	lista *l = (lista*) malloc(sizeof(lista*));
-	if (l !=NULL){ 
-		l->inicio = NULL;
-		l->tamanho = 0;
-        l->dado = -1; //Dado valido para ser substituido
-	}
-	return(l);
-}
-
-void lista_inserir(lista *l, int dado){
-    NO *pnovo = (NO *) malloc(sizeof (NO));
-    if (l->inicio == NULL)
-        l->inicio = pnovo; //Caso seja inicio da lista
-    else
-        pnovo->prox = NULL; //Caso nao seja inicio da lista
-    pnovo->dado = dado;
-    pnovo->prox = NULL;
-    l->fim = pnovo;
-    l->tamanho++;
-}
-
-void lista_esvazia(NO *ptr){ 
-	if (ptr != NULL){
-		if(ptr->prox != NULL)
-			lista_esvazia(ptr->prox);
-		item_apagar(&ptr->dado);
-		free(ptr);
-		ptr = NULL;
-	}
-}
-
-void lista_apagar(lista **ptr){
-	if (*ptr == NULL)
-		return;
-	lista_esvazia((*ptr)->inicio);
-	free(*ptr);
-	*ptr = NULL;
+void destruir(int** tabela) {
+    for(int i = 0; i < B; i++)
+        lista_apagar(&tabela);
 }
 
 int main(int argc, char const *argv[])
@@ -182,8 +138,7 @@ int main(int argc, char const *argv[])
     double tempo_busca_h_div = finaliza_tempo();
 
     // destroi tabela hash com hash por divisão
-    free(tabela_div);
-
+    destruir();
 
 
     // cria tabela hash com hash por multiplicação

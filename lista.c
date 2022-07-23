@@ -6,7 +6,7 @@
 typedef struct no_ NO;
 
 struct no_{
-	ITEM *item;
+	int *item;
 	NO *proximo;
 }; 
 
@@ -26,17 +26,17 @@ LISTA *lista_criar(void){
 	return(lista);
 }
 
-boolean lista_inserir_fim(LISTA *lista, ITEM *item){
+boolean lista_inserir(LISTA *lista, unsigned elemento){
 	if (lista != NULL) {
 		NO *pnovo = (NO *) malloc(sizeof (NO));
 		if (lista->inicio == NULL){
-			pnovo->item = item;
 			lista->inicio = pnovo;
+			pnovo->item = elemento;
 			pnovo->proximo = NULL;
 		}
 		else {
 			lista->fim->proximo = pnovo;
-			pnovo->item = item;
+			pnovo->item = elemento;
 			pnovo->proximo = NULL;
 		}
 		lista->fim = pnovo;
@@ -65,20 +65,19 @@ void lista_apagar(LISTA **ptr){
 	*ptr = NULL;
 }
 
-//Se as cidades A e B se conectam, retorna sua distancia. Caso contrário, retorna -1
-int lista_busca(LISTA *lista, int cidade_A, int cidade_B){ 
+bool lista_busca(LISTA *lista, unsigned elemento){ 
 	NO *p;
 	if (lista != NULL){
 		p = lista->inicio;
 		while (p != NULL) {
-			//Se A e B se conectam, retorna sua distancia, caso contrario, retornara -1 no return a abaixo.
-			if ((item_get_cidade_A(p->item) == cidade_A && item_get_cidade_B(p->item) == cidade_B) || (item_get_cidade_A(p->item) == cidade_B && item_get_cidade_B(p->item) == cidade_A))
-				return (item_get_distancia(p->item)); 
+			//Se dado encontrado retorna verdadeiro
+			if (l->item == elemento)
+				return TRUE; 
 			p = p->proximo;
 		}
 	}
-	//A e B nao se conectam
-	return(-1);
+	//nao encontrado
+	return FALSE;
 }
 
 boolean lista_vazia(LISTA *lista){
@@ -87,10 +86,10 @@ boolean lista_vazia(LISTA *lista){
 	return (FALSE);
 }
 
-boolean lista_remover_item(LISTA *lista, int chave) {
+boolean lista_remover_item(LISTA *lista, unsigned elemento) {
 	if (lista != NULL){
 		NO *p = lista->inicio; NO *aux = NULL;
-		while(p != NULL && (item_get_chave(p->item)) != chave){/*procura até achar chave ou fim lista*/
+		while(p != NULL && p->item != elemento){/*procura até achar chave ou fim lista*/
 			aux = p; /*aux - guarda posição anterior ao nó sendo pesquisado (p)*/
 			p = p->proximo;
 		}

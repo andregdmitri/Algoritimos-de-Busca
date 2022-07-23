@@ -80,7 +80,8 @@ void merge_sort_recursivo(int* entradas, int inicio, int fim, int *copia_entrada
         entradas[i] = copia_entradas[i];
 }
 
-void merge_sort(int* entradas, int inicio, int tamanho) {
+void merge_sort(int* entradas, int inicio, int tamanho) 
+{
     int *copia_entradas = (int *) malloc(tamanho*sizeof(int));
     merge_sort_recursivo(entradas, 0, tamanho-1, copia_entradas);
     free(copia_entradas);
@@ -108,7 +109,8 @@ int main(int argc, char const *argv[])
         
     // realizar consultas na tabela de indices
     inicia_tempo();
-    for (i = 0; i < N; i++) {
+    for (i = 0; i < N; i++) 
+    {
         // buscar o elemento consultas[i] na entrada
         for(j = 10000; j <= T; i+=10000)
             if(consultas[i] >= tabela[j])
@@ -119,8 +121,6 @@ int main(int argc, char const *argv[])
     }
     double tempo_busca = finaliza_tempo();
 
-    for (i = 0; i < N; i++)
-        printf("%d ", entradas[i]);
     printf("\nTempo de busca    :\t%fs\n", tempo_busca);
     printf("Itens encontrados :\t%d\n", encontrados);
 

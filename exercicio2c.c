@@ -82,7 +82,7 @@ int main(int argc, char const *argv[])
     
 
     // cria tabela hash com hash por divisão
-    
+
     // inserção dos dados na tabela hash com hash por divisão
     inicia_tempo();
     for (int i = 0; i < N; i++) {

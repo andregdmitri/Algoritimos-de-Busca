@@ -82,7 +82,7 @@ LISTA *lista_criar(void)
     return (lista);
 }
 
-bool lista_inserir(LISTA *lista, string elemento)
+bool lista_inserir(LISTA *lista, string elemento, int *colisoes)
 {
     if (lista != NULL)
     {
@@ -100,6 +100,7 @@ bool lista_inserir(LISTA *lista, string elemento)
             pnovo->item = malloc(sizeof(char) * MAX_STRING_LEN);
             strcpy(pnovo->item, elemento);
             pnovo->proximo = NULL;
+            (*colisoes)++;
         }
         lista->fim = pnovo;
         lista->tamanho++;
@@ -157,20 +158,20 @@ unsigned h_mul(unsigned x, unsigned B)
     return fmod(x * A, 1) * B;
 }
 
-bool inserir_div(LISTA **tabela, string elemento, unsigned B)
+bool inserir_div(LISTA **tabela, string elemento, unsigned B, unsigned *colisoes)
 {
     int i, posicao, conversao;
     conversao = converter(elemento);
     posicao = h_div(conversao, B);
-    return lista_inserir(tabela[posicao], elemento);
+    return lista_inserir(tabela[posicao], elemento, colisoes);
 }
 
-bool inserir_mul(LISTA **tabela, string elemento, unsigned B)
+bool inserir_mul(LISTA **tabela, string elemento, unsigned B, unsigned *colisoes)
 {
     int i, posicao, conversao;
     conversao = converter(elemento);
     posicao = h_mul(conversao, B);
-    return lista_inserir(tabela[posicao], elemento);
+    return lista_inserir(tabela[posicao], elemento, colisoes);
 }
 
 bool busca_div(LISTA **tabela, string elemento, unsigned B)
@@ -215,7 +216,7 @@ int main(int argc, char const *argv[])
     for (i = 0; i < N; i++)
     {
         // inserir insercoes[i] na tabela hash
-        inserir_div(tabela_div, insercoes[i], B);
+        inserir_div(tabela_div, insercoes[i], B, &colisoes_h_div);
     }
     double tempo_insercao_h_div = finaliza_tempo();
 
@@ -241,7 +242,7 @@ int main(int argc, char const *argv[])
     for (int i = 0; i < N; i++)
     {
         // inserir insercoes[i] na tabela hash
-        inserir_div(tabela_mul, insercoes[i], B);
+        inserir_div(tabela_mul, insercoes[i], B, &colisoes_h_mul);
     }
     double tempo_insercao_h_mul = finaliza_tempo();
 

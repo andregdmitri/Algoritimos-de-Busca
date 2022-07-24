@@ -7,14 +7,14 @@ clock_t _ini, _fim;
 
 // Definição do tipo booleano
 unsigned char typedef bool;
-#define TRUE  1
+#define TRUE 1
 #define FALSE 0
 
-int* ler_inteiros(const char * arquivo, const int n)
+int *ler_inteiros(const char *arquivo, const int n)
 {
-    FILE* f = fopen(arquivo, "r");
+    FILE *f = fopen(arquivo, "r");
 
-    int * inteiros = (int *) malloc(sizeof(int) * n);
+    int *inteiros = (int *)malloc(sizeof(int) * n);
 
     for (int i = 0; !feof(f); i++)
         fscanf(f, "%d\n", &inteiros[i]);
@@ -33,25 +33,25 @@ void inicia_tempo()
 double finaliza_tempo()
 {
     _fim = clock();
-    return ((double) (_fim - _ini)) / CLOCKS_PER_SEC;
+    return ((double)(_fim - _ini)) / CLOCKS_PER_SEC;
 }
 
-//Busca com MOVE FOWARD
-bool busca_move_foward(int consulta, int* entradas, int N) 
+// Busca com MOVE FOWARD
+bool busca_move_foward(int consulta, int *entradas, int N)
 {
     int i, j, numero_encontrado;
-    for (i = 0; i < N; i++) 
+    for (i = 0; i < N; i++)
     {
-        if (consulta == entradas[i]) 
+        if (consulta == entradas[i])
         {
-            numero_encontrado = entradas[i]; //Guarda o numero encontado na busca
-            for(j = i; j > 0; j--)
-                entradas[j] = entradas[j-1]; //Move todo vetor para frente, do inicio ate o numero encontrado
-            entradas[0] = numero_encontrado;//O numero encontrado na busca ocupa Inicio do vetor
+            numero_encontrado = entradas[i]; // Guarda o numero encontado na busca
+            for (j = i; j > 0; j--)
+                entradas[j] = entradas[j - 1]; // Move todo vetor para frente, do inicio ate o numero encontrado
+            entradas[0] = numero_encontrado;   // O numero encontrado na busca ocupa Inicio do vetor
             return TRUE;
         }
     }
-    return FALSE; //Consulta nao encontrada na Entrada
+    return FALSE; // Consulta nao encontrada na Entrada
 }
 
 int main(int argc, char const *argv[])
@@ -60,12 +60,12 @@ int main(int argc, char const *argv[])
     const int N = 50000;
     unsigned encontrados = 0;
 
-    int* entradas = ler_inteiros("inteiros_entrada.txt", N);
-    int* consultas = ler_inteiros("inteiros_busca.txt", N);
+    int *entradas = ler_inteiros("inteiros_entrada.txt", N);
+    int *consultas = ler_inteiros("inteiros_busca.txt", N);
 
     // realiza busca sequencia com realocação usando o MOVE-FOWARD
     inicia_tempo();
-    for (i = 0; i < N; i++) 
+    for (i = 0; i < N; i++)
     {
         // buscar o elemento consultas[i] na entrada
         if (busca_move_foward(consultas[i], entradas, N))
@@ -75,6 +75,10 @@ int main(int argc, char const *argv[])
 
     printf("Tempo de busca    :\t%fs\n", tempo_busca);
     printf("Itens encontrados :\t%d\n", encontrados);
+
+    // Liberando memoria
+    free(entradas);
+    free(consultas);
 
     return 0;
 }

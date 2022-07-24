@@ -7,14 +7,14 @@ clock_t _ini, _fim;
 
 // Definição do tipo booleano
 unsigned char typedef bool;
-#define TRUE  1
+#define TRUE 1
 #define FALSE 0
 
-int* ler_inteiros(const char * arquivo, const int n)
+int *ler_inteiros(const char *arquivo, const int n)
 {
-    FILE* f = fopen(arquivo, "r");
+    FILE *f = fopen(arquivo, "r");
 
-    int * inteiros = (int *) malloc(sizeof(int) * n);
+    int *inteiros = (int *)malloc(sizeof(int) * n);
 
     for (int i = 0; !feof(f); i++)
         fscanf(f, "%d\n", &inteiros[i]);
@@ -33,26 +33,27 @@ void inicia_tempo()
 double finaliza_tempo()
 {
     _fim = clock();
-    return ((double) (_fim - _ini)) / CLOCKS_PER_SEC;
+    return ((double)(_fim - _ini)) / CLOCKS_PER_SEC;
 }
 
-//busca por TRANSPOSICAO
-bool busca_tranposicao (int consulta, int* entradas, int N) {
+// busca por TRANSPOSICAO
+bool busca_tranposicao(int consulta, int *entradas, int N)
+{
     int i, aux;
-    for (i = 0; i < N; i++) 
+    for (i = 0; i < N; i++)
     {
-        if (consulta == entradas[i]) 
+        if (consulta == entradas[i])
         {
-            if (i > 0) 
-            { //Transpondo o elemento para tras
-                aux = entradas[i];  
-                entradas[i] = entradas[i-1];
-                entradas[i-1] = aux;
+            if (i > 0)
+            { // Transpondo o elemento para tras
+                aux = entradas[i];
+                entradas[i] = entradas[i - 1];
+                entradas[i - 1] = aux;
             }
             return TRUE;
         }
     }
-    return FALSE; //Consulta nao encontrada na Entrada
+    return FALSE; // Consulta nao encontrada na Entrada
 }
 
 int main(int argc, char const *argv[])
@@ -61,8 +62,8 @@ int main(int argc, char const *argv[])
     unsigned encontrados = 0;
     int i, j, aux;
 
-    int* entradas = ler_inteiros("inteiros_entrada.txt", N);
-    int* consultas = ler_inteiros("inteiros_busca.txt", N);
+    int *entradas = ler_inteiros("inteiros_entrada.txt", N);
+    int *consultas = ler_inteiros("inteiros_busca.txt", N);
 
     // realiza busca sequencia com realocação por TRANSPOSICAO
     inicia_tempo();
@@ -76,6 +77,10 @@ int main(int argc, char const *argv[])
 
     printf("Tempo de busca    :\t%fs\n", tempo_busca);
     printf("Itens encontrados :\t%d\n", encontrados);
+
+    // Liberando memoria
+    free(entradas);
+    free(consultas);
 
     return 0;
 }

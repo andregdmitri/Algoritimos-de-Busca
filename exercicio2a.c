@@ -167,7 +167,7 @@ int main(int argc, char const *argv[])
     // limpa a tabela hash com hash por divisão
     for (i = 0; i < B; i++)
         free(tabela_div[i]);
-    free(tabela_div[i]);
+    free(tabela_div);
 
 
 //******************************* Hash por MULTIPLICACAO *******************************
@@ -194,7 +194,7 @@ int main(int argc, char const *argv[])
     // limpa a tabela hash com hash por multiplicação
     for (i = 0; i < B; i++)
         free(tabela_mul[i]);
-    free(tabela_mul[i]);
+    free(tabela_mul);
 
     printf("Hash por Divisão\n");
     printf("Colisões na inserção: %d\n", colisoes_h_div);

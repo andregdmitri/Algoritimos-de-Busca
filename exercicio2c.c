@@ -108,7 +108,7 @@ void lista_esvazia(NO *ptr){
 	}
 }
 
-void lista_destruir(LISTA **ptr){
+void lista_apagar(LISTA **ptr){
 	if (*ptr == NULL)
 		return;
 	lista_esvazia((*ptr)->inicio);
@@ -170,11 +170,6 @@ bool busca_mul (LISTA** tabela, string elemento, unsigned B) {
     return lista_busca(tabela[posicao], elemento);
 }
 
-void destruir(LISTA** tabela, int B) {
-    for(int i = 0; i < B; i++)
-        lista_destruir(&tabela[i]);
-}
-
 int main(int argc, char const *argv[])
 {
     int i;
@@ -216,7 +211,6 @@ int main(int argc, char const *argv[])
     double tempo_busca_h_div = finaliza_tempo();
 
     // destroi tabela hash com hash por divisão
-    // destruir(tabela_div[i], B);
 
     // cria tabela hash com hash por multiplicação
     LISTA** tabela_mul = (LISTA**) malloc(B * sizeof(LISTA));
@@ -240,9 +234,8 @@ int main(int argc, char const *argv[])
     }
     double tempo_busca_h_mul = finaliza_tempo();
 
-    // destroi tabela hash com hash por multiplicação
-    //destruir(tabela_mul[i], B);
-
+    // destroi tabela hash com hash por multiplicação'
+    
     printf("Hash por Divisão\n");
     printf("Colisões na inserção: %d\n", colisoes_h_div);
     printf("Tempo de inserção   : %fs\n", tempo_insercao_h_div);

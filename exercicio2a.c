@@ -78,7 +78,7 @@ bool inserir_div(string *tabela, string elemento, unsigned B, unsigned *coloises
             strcpy(tabela[posicao], elemento);
             return TRUE;
         }
-        *coloises_h_div++; // Cada vez que nao der para inserir eh uma colisao
+        (*coloises_h_div)++; // Cada vez que nao der para inserir eh uma colisao
     }
     // tabela cheia
     return FALSE;
@@ -97,7 +97,7 @@ bool inserir_mul(string *tabela, string elemento, unsigned B, unsigned *colisoes
             strcpy(tabela[posicao], elemento);
             return TRUE;
         }
-        *colisoes_h_mul++; // Cada vez que nao der para inserir eh uma colisao
+        (*colisoes_h_mul)++; // Cada vez que nao der para inserir eh uma colisao
     }
     // tabela cheia
     return FALSE;

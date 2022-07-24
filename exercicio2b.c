@@ -85,7 +85,7 @@ bool inserir(string *tabela, string elemento, unsigned B, unsigned *colisoes)
             strcpy(tabela[posicao], elemento);
             return TRUE;
         }
-        *colisoes++; // Cada vez que nao der para inserir eh uma colisao
+        (*colisoes)++; // Cada vez que nao der para inserir eh uma colisao
     }
     // tabela cheia
     return FALSE;

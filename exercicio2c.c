@@ -88,14 +88,14 @@ bool lista_inserir(LISTA *lista, string elemento)
     {
         NO *pnovo = (NO *)malloc(sizeof(NO));
         if (lista->inicio == NULL)
-        {
+        {// Se for o primeiro NO
             lista->inicio = pnovo;
             pnovo->item = malloc(sizeof(char) * MAX_STRING_LEN);
             strcpy(pnovo->item, elemento);
             pnovo->proximo = NULL;
         }
         else
-        {
+        {// Se nao for o primeiro NO da lista, houve colisao e eh adicionado no fim da lista
             lista->fim->proximo = pnovo;
             pnovo->item = malloc(sizeof(char) * MAX_STRING_LEN);
             strcpy(pnovo->item, elemento);
@@ -157,7 +157,7 @@ unsigned h_mul(unsigned x, unsigned B)
     return fmod(x * A, 1) * B;
 }
 
-bool inserir_div(LISTA **tabela, string elemento, unsigned B, unsigned *colisoes)
+bool inserir_div(LISTA **tabela, string elemento, unsigned B)
 {
     int i, posicao, conversao;
     conversao = converter(elemento);
@@ -165,7 +165,7 @@ bool inserir_div(LISTA **tabela, string elemento, unsigned B, unsigned *colisoes
     return lista_inserir(tabela[posicao], elemento);
 }
 
-bool inserir_mul(LISTA **tabela, string elemento, unsigned B, unsigned *colisoes)
+bool inserir_mul(LISTA **tabela, string elemento, unsigned B)
 {
     int i, posicao, conversao;
     conversao = converter(elemento);
@@ -215,7 +215,7 @@ int main(int argc, char const *argv[])
     for (i = 0; i < N; i++)
     {
         // inserir insercoes[i] na tabela hash
-        inserir_div(tabela_div, insercoes[i], B, &colisoes_h_div);
+        inserir_div(tabela_div, insercoes[i], B);
     }
     double tempo_insercao_h_div = finaliza_tempo();
 
@@ -241,7 +241,7 @@ int main(int argc, char const *argv[])
     for (int i = 0; i < N; i++)
     {
         // inserir insercoes[i] na tabela hash
-        inserir_div(tabela_mul, insercoes[i], B, &colisoes_h_mul);
+        inserir_div(tabela_mul, insercoes[i], B);
     }
     double tempo_insercao_h_mul = finaliza_tempo();
 
@@ -255,7 +255,8 @@ int main(int argc, char const *argv[])
     }
     double tempo_busca_h_mul = finaliza_tempo();
 
-    // destroi tabela hash com hash por multiplicação'
+    // destroi tabela hash com hash por multiplicação
+    
 
     printf("Hash por Divisão\n");
     printf("Colisões na inserção: %d\n", colisoes_h_div);

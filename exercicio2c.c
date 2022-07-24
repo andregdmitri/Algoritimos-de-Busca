@@ -57,7 +57,7 @@ double finaliza_tempo()
 typedef struct no_ NO;
 
 typedef struct no_{
-	int item;
+	string item;
 	NO *proximo;
 } NO; 
 
@@ -77,25 +77,27 @@ LISTA *lista_criar(void){
 	return(lista);
 }
 
-bool lista_inserir(LISTA *lista, unsigned elemento){
+bool lista_inserir(LISTA *lista, string elemento){
 	if (lista != NULL) {
 		NO *pnovo = (NO *) malloc(sizeof (NO));
 		if (lista->inicio == NULL){
 			lista->inicio = pnovo;
-			pnovo->item = elemento;
+            pnovo->item = malloc(sizeof(char) * MAX_STRING_LEN);
+            strcpy(pnovo->item, elemento);
 			pnovo->proximo = NULL;
 		}
 		else {
 			lista->fim->proximo = pnovo;
-			pnovo->item = elemento;
+			pnovo->item = malloc(sizeof(char) * MAX_STRING_LEN);
+            strcpy(pnovo->item, elemento);
 			pnovo->proximo = NULL;
 		}
 		lista->fim = pnovo;
 		lista->tamanho++;
-		return (TRUE);
+		return TRUE;
 	}
 	else 
-		return(FALSE);
+		return FALSE;
 }
 
 void lista_esvazia(NO *ptr){ 
@@ -103,7 +105,6 @@ void lista_esvazia(NO *ptr){
 		if(ptr->proximo != NULL)
 			lista_esvazia(ptr->proximo);
 		free(ptr);
-		ptr = NULL;
 	}
 }
 
@@ -115,25 +116,19 @@ void lista_destruir(LISTA **ptr){
 	*ptr = NULL;
 }
 
-bool lista_busca(LISTA *lista, unsigned elemento){ 
+bool lista_busca(LISTA *lista, string elemento){ 
 	NO *p;
 	if (lista != NULL){
 		p = lista->inicio;
 		while (p != NULL) {
 			//Se dado encontrado retorna verdadeiro
-			if (p->item == elemento)
+			if (strcmp(p->item, elemento) == 0)
 				return TRUE; 
 			p = p->proximo;
 		}
 	}
 	//nao encontrado
 	return FALSE;
-}
-
-bool lista_vazia(LISTA *lista){
-	if((lista != NULL) && lista->inicio == NULL)
-		return (TRUE);
-	return (FALSE);
 }
 
 unsigned h_div(unsigned x, unsigned B)
@@ -147,37 +142,37 @@ unsigned h_mul(unsigned x, unsigned B)
     return fmod(x * A, 1) * B;
 }
 
-bool inserir_div(LISTA** tabela, string elemento, unsigned B) {
-    int i, posicao, elem;
-    elem = converter(elemento);
-    posicao = h_div(elem, B);
-    return lista_inserir(tabela[posicao], elem);
+bool inserir_div(LISTA** tabela, string elemento, unsigned B, unsigned *colisoes) {
+    int i, posicao, conversao;
+    conversao = converter(elemento);
+    posicao = h_div(conversao, B);
+    return lista_inserir(tabela[posicao], elemento);
 }
 
-bool inserir_mul(LISTA** tabela, string elemento, unsigned B) {
-    int i, posicao, elem;
-    elem = converter(elemento);
-    posicao = h_mul(elem, B);
-    return lista_inserir(tabela[posicao], elem);
+bool inserir_mul(LISTA** tabela, string elemento, unsigned B, unsigned *colisoes) {
+    int i, posicao, conversao;
+    conversao = converter(elemento);
+    posicao = h_mul(conversao, B);
+    return lista_inserir(tabela[posicao], elemento);
 }
 
 bool busca_div (LISTA** tabela, string elemento, unsigned B) {
-    int i, posicao, elem;
-    elem = converter(elemento);
-    posicao = h_div(elem, B);
-    return lista_busca(tabela[posicao], elem);
+    int i, posicao, conversao;
+    conversao = converter(elemento);
+    posicao = h_div(conversao, B);
+    return lista_busca(tabela[posicao], elemento);
 }
 
 bool busca_mul (LISTA** tabela, string elemento, unsigned B) {
-    int i, posicao, elem;
-    elem = converter(elemento);
-    posicao = h_mul(elem, B);
-    return lista_busca(tabela[posicao], elem);
+    int i, posicao, conversao;
+    conversao = converter(elemento);
+    posicao = h_mul(conversao, B);
+    return lista_busca(tabela[posicao], elemento);
 }
 
-void destruir(LISTA*** tabela, int B) {
+void destruir(LISTA** tabela, int B) {
     for(int i = 0; i < B; i++)
-        lista_destruir(&(*tabela[i]));
+        lista_destruir(&tabela[i]);
 }
 
 int main(int argc, char const *argv[])
@@ -206,7 +201,7 @@ int main(int argc, char const *argv[])
     inicia_tempo();
     for (i = 0; i < N; i++) {
         // inserir insercoes[i] na tabela hash
-        inserir_div(tabela_div, insercoes[i], B);
+        inserir_div(tabela_div, insercoes[i], B, &colisoes_h_div);
     }
     double tempo_insercao_h_div = finaliza_tempo();
 
@@ -221,8 +216,7 @@ int main(int argc, char const *argv[])
     double tempo_busca_h_div = finaliza_tempo();
 
     // destroi tabela hash com hash por divisão
-    destruir(&tabela_div, B);
-    free(tabela_div);
+    // destruir(tabela_div[i], B);
 
     // cria tabela hash com hash por multiplicação
     LISTA** tabela_mul = (LISTA**) malloc(B * sizeof(LISTA));
@@ -233,7 +227,7 @@ int main(int argc, char const *argv[])
     inicia_tempo();
     for (int i = 0; i < N; i++) {
         // inserir insercoes[i] na tabela hash
-        inserir_div(tabela_mul, insercoes[i], B);
+        inserir_div(tabela_mul, insercoes[i], B, &colisoes_h_mul);
     }
     double tempo_insercao_h_mul = finaliza_tempo();
 
@@ -241,13 +235,13 @@ int main(int argc, char const *argv[])
     inicia_tempo();
     for (int i = 0; i < M; i++) {
         // buscar consultas[i] na tabela hash
-        busca_div(tabela_mul, consultas[i], B);
+        if(busca_div(tabela_mul, consultas[i], B))
+            encontrados_h_mul++;
     }
     double tempo_busca_h_mul = finaliza_tempo();
 
     // destroi tabela hash com hash por multiplicação
-    destruir(&tabela_mul, B);
-    free(tabela_mul);
+    //destruir(tabela_mul[i], B);
 
     printf("Hash por Divisão\n");
     printf("Colisões na inserção: %d\n", colisoes_h_div);

@@ -70,6 +70,12 @@ typedef struct lista_
     int tamanho;
 } LISTA;
 
+LISTA *lista_criar(void); 
+bool lista_inserir(LISTA *lista, string elemento);
+bool lista_vazia(LISTA *lista);
+void lista_apagar(LISTA **ptr);
+bool lista_busca(LISTA *lista, string elemento);
+
 LISTA *lista_criar(void)
 {
     LISTA *lista = (LISTA *)malloc(sizeof(LISTA *));
@@ -82,7 +88,7 @@ LISTA *lista_criar(void)
     return (lista);
 }
 
-bool lista_inserir(LISTA *lista, string elemento, int *colisoes)
+bool lista_inserir(LISTA *lista, string elemento)
 {
     if (lista != NULL)
     {
@@ -95,12 +101,11 @@ bool lista_inserir(LISTA *lista, string elemento, int *colisoes)
             pnovo->proximo = NULL;
         }
         else
-        {// Se nao for o primeiro NO da lista, houve colisao e eh adicionado no fim da lista
+        {// Se nao for o primeiro NO da lista
             lista->fim->proximo = pnovo;
             pnovo->item = malloc(sizeof(char) * MAX_STRING_LEN);
             strcpy(pnovo->item, elemento);
             pnovo->proximo = NULL;
-            (*colisoes)++;
         }
         lista->fim = pnovo;
         lista->tamanho++;
@@ -108,6 +113,12 @@ bool lista_inserir(LISTA *lista, string elemento, int *colisoes)
     }
     else
         return FALSE;
+}
+
+bool lista_vazia(LISTA *lista){
+	if((lista != NULL) && lista->inicio == NULL)
+		return (TRUE);
+	return (FALSE);
 }
 
 void lista_esvazia(NO *ptr)
@@ -163,7 +174,9 @@ bool inserir_div(LISTA **tabela, string elemento, unsigned B, unsigned *colisoes
     int i, posicao, conversao;
     conversao = converter(elemento);
     posicao = h_div(conversao, B);
-    return lista_inserir(tabela[posicao], elemento, colisoes);
+    if (!lista_vazia(tabela[posicao])) //Lista nao vazia entao tem Colisao
+        (*colisoes)++;
+    return lista_inserir(tabela[posicao], elemento);
 }
 
 bool inserir_mul(LISTA **tabela, string elemento, unsigned B, unsigned *colisoes)
@@ -171,7 +184,9 @@ bool inserir_mul(LISTA **tabela, string elemento, unsigned B, unsigned *colisoes
     int i, posicao, conversao;
     conversao = converter(elemento);
     posicao = h_mul(conversao, B);
-    return lista_inserir(tabela[posicao], elemento, colisoes);
+    if (!lista_vazia(tabela[posicao])) //Lista nao vazia entao tem Colisao
+        (*colisoes)++;
+    return lista_inserir(tabela[posicao], elemento);
 }
 
 bool busca_div(LISTA **tabela, string elemento, unsigned B)
@@ -270,10 +285,6 @@ int main(int argc, char const *argv[])
     printf("Tempo de inserção   : %fs\n", tempo_insercao_h_mul);
     printf("Tempo de busca      : %fs\n", tempo_busca_h_mul);
     printf("Itens encontrados   : %d\n", encontrados_h_mul);
-
-    // Liberando memoria
-    free(insercoes);
-    free(consultas);
 
     return 0;
 }
